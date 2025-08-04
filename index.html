@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jarvis Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Jarvis Assistant</h1>
+    <button id="mode-toggle">Toggle Mode</button>
+    <div id="chat-box"></div>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+      <button onclick="startListening()">🎤</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
