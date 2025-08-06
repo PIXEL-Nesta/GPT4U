@@ -89,6 +89,38 @@ function respond(msg) {
       response = "Say: 'Set alarm for 5 minutes'";
     }
   }
+else if (msg.includes("open calendar")) {
+  response = "Opening calendar.";
+  window.open("https://calendar.google.com", "_blank");
+}
+else if (msg.includes("open calculator")) {
+  response = "Opening calculator.";
+  window.open("https://www.google.com/search?q=calculator", "_blank");
+}
+let stopwatchStart;
+
+else if (msg.includes("start stopwatch")) {
+  stopwatchStart = Date.now();
+  response = "Stopwatch started.";
+}
+
+else if (msg.includes("stopwatch stop")) {
+  if (stopwatchStart) {
+    const duration = Math.round((Date.now() - stopwatchStart) / 1000);
+    response = `⏱ Stopwatch stopped. Time: ${duration} seconds.`;
+    stopwatchStart = null;
+  } else {
+    response = "Stopwatch wasn't started.";
+  }
+}
+else if (msg.includes("start timer for")) {
+  const secs = parseInt(msg.match(/\d+/)[0]);
+  response = `Timer started for ${secs} seconds.`;
+  setTimeout(() => {
+    speak("⏰ Timer done!");
+    alert("⏰ Timer done!");
+  }, secs * 1000);
+}
 
   else if (message.includes("weather")) {
     response = "The weather seems fine today. (Offline response)";
