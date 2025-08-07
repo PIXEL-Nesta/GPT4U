@@ -61,6 +61,7 @@ function startListening() {
 function respond(msg) {
   const message = msg.toLowerCase();
   let response = "Sorry, I didn’t understand that.";
+  let stopwatchStart;
 
   if (message.includes("hello")) response = "Hi! How can I help you?";
   else if (message.includes("hi")) response = "Hi! How can I help you?";
@@ -68,6 +69,10 @@ function respond(msg) {
   else if (message.includes("time")) response = new Date().toLocaleTimeString();
   else if (message.includes("date")) response = new Date().toLocaleDateString();
 
+  else if (msg.includes("start stopwatch")) {
+    stopwatchStart = Date.now();
+    response = "Stopwatch started.";
+  }
   else if (message.startsWith("set alarm for")) {
     const match = message.match(/set alarm for (\d+)\s*(seconds?|minutes?|hours?)/);
     if (match) {
@@ -89,38 +94,33 @@ function respond(msg) {
       response = "Say: 'Set alarm for 5 minutes'";
     }
   }
-else if (msg.includes("open calendar")) {
-  response = "Opening calendar.";
-  window.open("https://calendar.google.com", "_blank");
-}
-else if (msg.includes("open calculator")) {
-  response = "Opening calculator.";
-  window.open("https://www.google.com/search?q=calculator", "_blank");
-}
-let stopwatchStart;
-
-else if (msg.includes("start stopwatch")) {
-  stopwatchStart = Date.now();
-  response = "Stopwatch started.";
-}
-
-else if (msg.includes("stopwatch stop")) {
-  if (stopwatchStart) {
-    const duration = Math.round((Date.now() - stopwatchStart) / 1000);
-    response = `⏱ Stopwatch stopped. Time: ${duration} seconds.`;
-    stopwatchStart = null;
-  } else {
-    response = "Stopwatch wasn't started.";
+  else if (msg.includes("open calendar")) {
+    response = "Opening calendar.";
+    window.open("https://calendar.google.com", "_blank");
   }
-}
-else if (msg.includes("start timer for")) {
-  const secs = parseInt(msg.match(/\d+/)[0]);
-  response = `Timer started for ${secs} seconds.`;
-  setTimeout(() => {
-    speak("⏰ Timer done!");
-    alert("⏰ Timer done!");
-  }, secs * 1000);
-}
+  else if (msg.includes("open calculator")) {
+    response = "Opening calculator.";
+    window.open("https://www.google.com/search?q=calculator", "_blank");
+  }
+ 
+
+  else if (msg.includes("stopwatch stop")) {
+    if (stopwatchStart) {
+      const duration = Math.round((Date.now() - stopwatchStart) / 1000);
+      response = `⏱ Stopwatch stopped. Time: ${duration} seconds.`;
+      stopwatchStart = null;
+    } else {
+      response = "Stopwatch wasn't started.";
+    }
+  }
+  else if (msg.includes("start timer for")) {
+    const secs = parseInt(msg.match(/\d+/)[0]);
+    response = `Timer started for ${secs} seconds.`;
+    setTimeout(() => {
+      speak("⏰ Timer done!");
+      alert("⏰ Timer done!");
+    }, secs * 1000);
+  }
 
   else if (message.includes("weather")) {
     response = "The weather seems fine today. (Offline response)";
@@ -180,16 +180,16 @@ else if (msg.includes("start timer for")) {
 
   const memory = JSON.parse(localStorage.getItem("memory") || "{}");
 
-if (message.includes("my name is")) {
-  const name = message.split("my name is")[1].trim();
-  memory.username = name;
-  localStorage.setItem("memory", JSON.stringify(memory));
-  response = `Nice to meet you, ${name}`;
-}
+  if (message.includes("my name is")) {
+    const name = message.split("my name is")[1].trim();
+    memory.username = name;
+    localStorage.setItem("memory", JSON.stringify(memory));
+    response = `Nice to meet you, ${name}`;
+  }
 
-else if (message.includes("what is my name")) {
-  response = memory.username ? `Your name is ${memory.username}` : "I don't know your name yet.";
-}
+  else if (message.includes("what is my name")) {
+    response = memory.username ? `Your name is ${memory.username}` : "I don't know your name yet.";
+  }
 
 
   // Math expression handling
